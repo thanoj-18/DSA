@@ -57,16 +57,16 @@ int main()
         }
         else if (ch == ')')
         {
-            char p = pop();
-            while (p == '(')
+            while (stack[top] != '(')
             {
-                pfexp[j] = p;
+                pfexp[j] = pop();
                 j++;
             }
+            pop();
         }
         else
         {
-            while (top != -1 && precedence(stack[top]) >= precedence(ch))
+            while (top != -1 && precedence(stack[top]) >= precedence(ch) && ch != '^')
             {
                 pfexp[j] = pop();
                 j++;
