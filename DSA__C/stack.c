@@ -61,6 +61,20 @@ void show()
     }
     return;
 }
+int size()
+{
+    if (isEmpty())
+    {
+        printf("Stack is Empty ");
+        return 0;
+    }
+    int count = 0;
+    for (int i = 0; i <= top; i++)
+    {
+        count++;
+    }
+    return count;
+}
 int main()
 {
 
@@ -72,6 +86,6 @@ int main()
     pop();
     show();
     printf("\n%d", peek());
-
+    printf("\nSize = %d ", size());
     return 0;
 }
