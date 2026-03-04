@@ -212,6 +212,17 @@ void reverse(sll *list)
     list->head = prev;
 }
 
+/////////// print in reverse ///////////////////////
+
+void reversePrint(node *temp)
+{
+    if (temp == NULL)
+        return;
+
+    reversePrint(temp->next);
+    printf("%d ",temp->item);
+}
+
 int main()
 {
     sll list1;
@@ -224,6 +235,9 @@ int main()
     insertlast(&list1, 6);
     deleteitem(&list1, 4);
     display(&list1);
+
+    printf("\nReverse Print :\n");
+    reversePrint(list1.head);
 
     return 0;
 }

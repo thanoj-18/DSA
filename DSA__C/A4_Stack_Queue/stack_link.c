@@ -56,8 +56,8 @@ void display(stack *s1)
         return;
     }
     printf("\nStack Elements :\n");
-    node *temp = (node *)malloc(sizeof(node));
-    temp = s1->top;
+
+    node *temp = s1->top;
     while (temp != NULL)
     {
         printf("%d ", temp->item);

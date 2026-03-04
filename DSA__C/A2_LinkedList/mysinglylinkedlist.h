@@ -32,4 +32,9 @@ int deleteitem(sll *list, int data);
 void display(sll *list);
 int size(sll *list);
 void reverse(sll *ilst);
+
+
+void reversePrint(node *temp);
+
+
 #endif
