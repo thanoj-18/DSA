@@ -14,32 +14,41 @@ int isEmpty(sll *list)
 void insertfirst(sll *list, int x)
 {
     node *n = (node *)malloc(sizeof(node));
-    n->item = x;
-    n->next = list->head;
-    if (list->head)
-    list->head = n;
-    else list->tail=n;
-}
-
-void insertlast(sll *list, int x)
-{
-    node *n = (node *)malloc(sizeof(node));
     if (!n)
         return;
     n->item = x;
-    n->next = list->head;
-    if (isEmpty(list))
+
+    if (list->head)
     {
+        n->next = list->head;
+        list->tail->next = n;
+
         list->head = n;
     }
     else
     {
-        node *temp = list->head;
-        while (temp->next != NULL)
-        {
-            temp = temp->next;
-        }
-        temp->next = n;
+        list->head = n;
+        list->tail = n;
+        n->next = n;
+    }
+}
+
+void insertlast(sll *list, int x)
+{
+    node *n = malloc(sizeof(node));
+    if (!n)
+        return;
+
+    if (isEmpty(list))
+    {
+        insertfirst(list, x);
+    }
+    else
+    {
+        n->item = x;
+        n->next = list->head;
+        list->tail->next = n;
+        list->tail = n;
     }
 }
 
@@ -53,7 +62,7 @@ int insertat(sll *list, int data, int position)
         return 1;
     }
     node *temp = list->head;
-    for (int i = 1; i < position - 1 && temp != NULL; i++)
+    for (int i = 1; i < position - 1 && temp != list->head; i++)
     {
         temp = temp->next;
     }
@@ -71,15 +80,19 @@ int insertat(sll *list, int data, int position)
 
 node *Search(sll *list, int data)
 {
+    if (isEmpty(list))
+        return NULL;
+
     node *temp = list->head;
-    while (temp != NULL)
+
+    do
     {
         if (temp->item == data)
         {
             return temp;
         }
         temp = temp->next;
-    }
+    } while (temp != list->head);
     return NULL;
 }
 
@@ -98,15 +111,24 @@ void insertafter(node *temp, int data)
 
 int deletefirst(sll *list)
 {
-    int data;
+
     if (isEmpty(list))
     {
         printf("List is Empty !");
         return -1;
     }
     node *temp = list->head;
-    data = temp->item;
-    list->head = temp->next;
+    int data = temp->item;
+    if (list->head == list->tail)
+    {
+        list->head = list->tail = NULL;
+    }
+    else
+    {
+
+        list->tail->next = temp->next;
+        list->head = temp->next;
+    }
     free(temp);
     return data;
 }
@@ -119,18 +141,23 @@ int deletelast(sll *list)
         printf("List is Empty !");
         return -1;
     }
-    if (list->head->next == NULL)
-    {
-        return deletefirst(list);
-    }
     node *temp = list->head;
-    while (temp->next->next != NULL)
+    if (list->head == list->tail)
+    {
+        int data = temp->item;
+        free(temp);
+        list->head = list->tail = NULL;
+        return data;
+    }
+
+    while (temp->next != list->head)
     {
         temp = temp->next;
     }
     node *last = temp->next;
     data = last->item;
-    temp->next = NULL;
+    temp->next = list->head;
+    list->tail = temp;
     free(last);
     return data;
 }
@@ -147,24 +174,43 @@ int deleteitem(sll *list, int x)
     node *temp = list->head;
     node *prev = NULL;
 
-    while (temp != NULL && temp->item != x)
+    // while (temp != NULL && temp->item != x)
+    // {
+    //     prev = temp;
+    //     temp = temp->next;
+    // }
+    // if (temp == NULL)
+    //     return 0;
+    // data = temp->item;
+    // if (prev == NULL)
+    // {
+    //     list->head = temp->next;
+    // }
+    // else
+    // {
+    //     prev->next = temp->next;
+    // }
+    do
     {
+        if (temp->item == x)
+        {
+            int data = temp->item;
+
+            if (temp == list->head)
+                return deletefirst(list);
+
+            if (temp == list->tail)
+                return deletelast(list);
+
+            prev->next = temp->next;
+            free(temp);
+            return data;
+        }
+
         prev = temp;
         temp = temp->next;
-    }
-    if (temp == NULL)
-        return 0;
-    data = temp->item;
-    if (prev == NULL)
-    {
-        list->head = temp->next;
-    }
-    else
-    {
-        prev->next = temp->next;
-    }
-    free(temp);
-    return data;
+
+    } while (temp != list->head);
 }
 
 void display(sll *list)
@@ -175,22 +221,27 @@ void display(sll *list)
         return;
     }
     node *temp = list->head;
-    while (temp != NULL)
+    do
     {
         printf("%d ", temp->item);
         temp = temp->next;
-    }
+    } while (temp != list->head);
+
+    printf("\n");
 }
 
 int size(sll *list)
 {
-    node *temp = list->head;
+    if (isEmpty(list))
+        return 0;
+
     int count = 0;
-    while (temp != NULL)
+    node *temp = list->head;
+    do
     {
         count++;
         temp = temp->next;
-    }
+    } while (temp != list->head);
     return count;
 }
 
@@ -205,14 +256,16 @@ void reverse(sll *list)
     node *curr = list->head;
     node *nxt = NULL;
 
-    while (curr != NULL)
+    do
     {
         nxt = curr->next;
         curr->next = prev;
         prev = curr;
         curr = nxt;
-    }
-    list->head = prev;
+    } while (curr != list->head);
+    node *temp = list->head;
+    list->head = list->tail;
+    list->tail = temp;
 }
 
 int main()
