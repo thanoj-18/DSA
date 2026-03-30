@@ -173,23 +173,6 @@ int deleteitem(sll *list, int x)
 
     node *temp = list->head;
     node *prev = NULL;
-
-    // while (temp != NULL && temp->item != x)
-    // {
-    //     prev = temp;
-    //     temp = temp->next;
-    // }
-    // if (temp == NULL)
-    //     return 0;
-    // data = temp->item;
-    // if (prev == NULL)
-    // {
-    //     list->head = temp->next;
-    // }
-    // else
-    // {
-    //     prev->next = temp->next;
-    // }
     do
     {
         if (temp->item == x)
