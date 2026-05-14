@@ -245,5 +245,9 @@ int main()
     insertlast(&list1, 6);
     deleteitem(&list1, 4);
     display(&list1);
+
+    printf("\nReverse Print :\n");
+    reverse(&list1);
+    display(&list1);
     return 0;
 }

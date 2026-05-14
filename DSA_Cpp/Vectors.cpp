@@ -5,8 +5,8 @@ using namespace std;
 int main(){
 
     vector<int> vec;
-
-    vec.push_back(25);
+    vec = {1,2,3,4,5,6};
+    vec.push_back(nums);
     vec.push_back(5);
     vec.push_back(15);
     vec.push_back(25);

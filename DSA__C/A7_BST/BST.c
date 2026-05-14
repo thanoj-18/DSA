@@ -166,43 +166,85 @@ void postorder(node *root)
     }
 }
 
-#define MAX 100
+// Level order
 
-node *queue[MAX];
-int front = -1, rear = -1;
-
-void enqueue(node *n)
+typedef struct QNode
 {
-    if (rear == MAX - 1)
-        return;
-    if (front == -1)
-        front = 0;
-    queue[++rear] = n;
+    node *data;
+    struct QNode *link;
+} QNode;
+
+typedef struct Queue
+{
+    QNode *front;
+    QNode *rear;
+} q;
+
+void createQ(q *q1)
+{
+    q1->front = q1->rear = NULL;
 }
 
-node *dequeue()
+int isEMpty(q *q1)
 {
-    if (front == -1 || front > rear)
+    return q1->front == NULL;
+}
+
+void enqueue(q *q1, node *x)
+{
+    QNode *n = (QNode *)malloc(sizeof(QNode));
+    n->data = x;
+    n->link = NULL;
+    if (isEMpty(q1))
+    {
+        q1->front = q1->rear = n;
+    }
+    else
+    {
+        q1->rear->link = n;
+        q1->rear = n;
+    }
+}
+
+node *dequeue(q *q1)
+{
+    if (isEMpty(q1))
+    {
         return NULL;
-    return queue[front++];
+    }
+    QNode *temp = q1->front;
+    node *data = temp->data;
+
+    q1->front = temp->link;
+
+    if (q1->front == NULL)
+    {
+        q1->rear = NULL;
+    }
+
+    free(temp);
+    return data;
 }
 
 void levelOrder(node *root)
 {
     if (root == NULL)
-        return;
+        return ;
 
-    enqueue(root);
+    q q1;
+    createQ(&q1);
 
-    while (front <= rear)
+    enqueue(&q1, root);
+
+    while (!isEMpty(&q1))
     {
-        node *temp = dequeue();
+        node *temp = dequeue(&q1);
         printf("%d ", temp->item);
 
         if (temp->left)
-            enqueue(temp->left);
+            enqueue(&q1, temp->left);
         if (temp->right)
-            enqueue(temp->right);
+            enqueue(&q1, temp->right);
     }
 }
 
@@ -220,7 +262,7 @@ int main()
     insert(&tree, 10);
     insert(&tree, 6);
     insert(&tree, 1);
-    
+
     printf("Inorder  ");
     inorder(tree.root);
 
@@ -233,7 +275,7 @@ int main()
     printf("\nLevel Order: ");
     levelOrder(tree.root);
 
-    delete(&tree, 50);
+    delete(&tree, 20);
 
     printf("\nAfter deletion (Inorder): ");
     inorder(tree.root);

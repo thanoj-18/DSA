@@ -41,7 +41,7 @@ void insertfirst(int data)
     list[0] = data;
     size++;
     return;
-}
+}           
 void insertlast(int data)
 {
     if (isFull())
@@ -78,6 +78,7 @@ int deletefirst()
         list[i] = list[i + 1];
     }
     size--;
+    return data;
 }
 
 int deletelast()

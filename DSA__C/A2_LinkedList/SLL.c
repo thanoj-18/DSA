@@ -191,6 +191,8 @@ int size(sll *list)
     return count;
 }
 
+////////// Reverse Linked list //////////////////////
+
 void reverse(sll *list)
 {
     if (isEmpty(list))
@@ -220,7 +222,35 @@ void reversePrint(node *temp)
         return;
 
     reversePrint(temp->next);
-    printf("%d ",temp->item);
+    printf("%d ", temp->item);
+}
+
+///////////////// Middle ELement ///////////////////
+
+int middle(sll *list)
+{
+    if (isEmpty(list))
+    {
+        printf("List is Empty !");
+        return -1;
+    }
+
+    node *curr = list->head;
+    node *temp = list->head;
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next->next;
+        if (temp == NULL)
+        {
+            break;
+        }
+
+        curr = curr->next;
+    }
+
+    int data = curr->item;
+    return data;
 }
 
 int main()
@@ -228,16 +258,21 @@ int main()
     sll list1;
     CreateList(&list1);
     insertfirst(&list1, 5);
-    insertfirst(&list1, 4);
-    insertfirst(&list1, 3);
+    insertfirst(&list1, 7);
     insertfirst(&list1, 2);
-    insertfirst(&list1, 1);
+    insertfirst(&list1, 20);
+    insertfirst(&list1, 35);
+    insertlast(&list1, 17);
+    insertlast(&list1, 10);
     insertlast(&list1, 6);
-    deleteitem(&list1, 4);
+    insertlast(&list1, 1);
+
     display(&list1);
 
     printf("\nReverse Print :\n");
     reversePrint(list1.head);
+
+    printf("\n\n%d is the middle element\n", middle(&list1));
 
     return 0;
 }
